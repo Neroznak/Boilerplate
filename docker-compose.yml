@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: boilerplate-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: boilerplate
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: boilerplate-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: boilerplate-api
+    working_dir: /app
+    command: sh -c "corepack enable && pnpm install --config.confirmModulesPurge=false && pnpm --filter @repo/database db:generate && pnpm --filter api exec nest start --watch"
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+      - api_node_modules:/app/node_modules
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/boilerplate?schema=public
+      REDIS_URL: redis://redis:6379
+      NODE_ENV: development
+
+      TSC_WATCHFILE: "PriorityPollingInterval"
+      TSC_WATCHDIRECTORY: "RecursiveDirectoryUsingFsWatchFile"
+      CHOKIDAR_USEPOLLING: "true"
+      CHOKIDAR_INTERVAL: "1000"
+      WATCHPACK_POLLING: "true"
+    depends_on:
+      - postgres
+      - redis
+volumes:
+  postgres_data:
+  redis_data:
+  api_node_modules:
