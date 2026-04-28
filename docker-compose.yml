@@ -27,7 +27,7 @@ services:
       dockerfile: apps/api/Dockerfile
     container_name: boilerplate-api
     working_dir: /app
-    command: sh -c "corepack enable && pnpm install --config.confirmModulesPurge=false && pnpm --filter @repo/database db:generate && pnpm --filter api exec nest start --watch"
+    command: sh -c "corepack enable && pnpm install --config.confirmModulesPurge=false && pnpm --filter @repo/database db:generate && cd apps/api && pnpm build && pnpm build:watch & cd apps/api && pnpm start:dev"
     ports:
       - "5000:5000"
     volumes:
