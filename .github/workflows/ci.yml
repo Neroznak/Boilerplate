@@ -36,3 +36,9 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Build API Docker image
+        run: docker build -f apps/api/prod.Dockerfile -t api .
+
+      - name: Build Web Docker image
+        run: docker build -f apps/web/prod.Dockerfile -t web .
+
