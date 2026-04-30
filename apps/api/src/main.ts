@@ -1,23 +1,35 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { APP_NAME } from "@repo/shared";
-import { NODE_ENV } from "@repo/config";
-import { REDIS_URL } from '@repo/config';
-
-
+import { config } from '@repo/config';
+import { Logger as PinoLogger } from 'nestjs-pino';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import { ValidationPipe } from '@nestjs/common';
+import cookieParser from 'cookie-parser';
 
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  console.log(APP_NAME);
-  console.log('NODE_ENV:', NODE_ENV);
-  console.log('REDIS_URL:', REDIS_URL);
+  app.use(cookieParser());
+  app.useLogger(app.get(PinoLogger));
+  app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
 
+  const logger = app.get(PinoLogger);
+
+  logger.log(APP_NAME);
+  logger.log(`NODE_ENV: ${config.NODE_ENV}`);
+  logger.log(`REDIS_URL: ${config.REDIS_URL}`);
   app.enableShutdownHooks();
 
-  const port = Number(process.env.PORT) || 5000;
-  await app.listen(port, '0.0.0.0');
+  await app.listen(config.PORT, '0.0.0.0');
 }
 
 bootstrap();

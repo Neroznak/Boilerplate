@@ -8,4 +8,4 @@ RUN apt-get update -y \
 
 RUN corepack enable
 
-CMD ["pnpm", "--filter", "api", "start:dev"]
+CMD ["sh", "apps/api/docker-entrypoint.dev.sh"]
