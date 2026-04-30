@@ -27,6 +27,8 @@ jobs:
 
       - name: Generate Prisma Client
         run: pnpm --filter @repo/database exec prisma generate
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/boilerplate
 
       - name: Lint
         run: pnpm lint
