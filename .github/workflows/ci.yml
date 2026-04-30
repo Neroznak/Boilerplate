@@ -55,8 +55,10 @@ jobs:
           docker build -f apps/api/prod.Dockerfile -t neroznakdn/boilerplate-api:latest .
           docker push neroznakdn/boilerplate-api:latest
 
-      - name: Build Web Docker image
-        run: docker build -f apps/web/prod.Dockerfile -t web .
+      - name: Build and push Web Docker image
+        run: |
+          docker build -f apps/web/prod.Dockerfile -t neroznakdn/boilerplate-web:latest .
+          docker push neroznakdn/boilerplate-web:latest
 
 
 
