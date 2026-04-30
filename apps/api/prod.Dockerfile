@@ -26,6 +26,7 @@ COPY . .
 
 RUN pnpm --filter @repo/shared build
 RUN pnpm --filter @repo/config build
+ENV DATABASE_URL="postgresql://postgres:postgres@localhost:5432/boilerplate"
 RUN pnpm --filter @repo/database db:generate
 RUN pnpm --filter @repo/database build
 RUN pnpm --filter api build
