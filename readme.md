@@ -14,8 +14,8 @@ Production-ready boilerplate для fullstack-приложений на базе
 ---
 
 ## 📐 Архитектура
-```
-bash
+```bash
+
 apps/
   api/        → NestJS backend
   web/        → Next.js frontend
