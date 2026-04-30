@@ -6,6 +6,7 @@ const envSchema = z.object({
   JWT_SECRET: z.string(),
   PORT: z.coerce.number().default(5000),
   JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),
+  SENTRY_DSN: z.string().optional().default(''),
 });
 
 const parsed = envSchema.safeParse(process.env);

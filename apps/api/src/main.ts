@@ -6,6 +6,13 @@ import { Logger as PinoLogger } from 'nestjs-pino';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
+import * as Sentry from '@sentry/nestjs';
+
+Sentry.init({
+  dsn: config.SENTRY_DSN,
+  environment: process.env.NODE_ENV,
+  tracesSampleRate: 1.0,
+});
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

@@ -11,6 +11,8 @@ import { BullModule } from '@nestjs/bullmq';
 import { REDIS_URL } from '@repo/config';
 import { QueuesModule } from './queues/queues.module';
 import type { IncomingMessage } from 'node:http';
+import { APP_FILTER } from '@nestjs/core';
+import { SentryGlobalFilter } from '@sentry/nestjs/setup';
 
 @Module({
   imports: [
@@ -43,6 +45,15 @@ import type { IncomingMessage } from 'node:http';
     QueuesModule,
   ],
   controllers: [AppController, HealthController],
-  providers: [AppService, PrismaService, RedisService, HealthService],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: SentryGlobalFilter,
+    },
+    AppService,
+    PrismaService,
+    RedisService,
+    HealthService,
+  ],
 })
 export class AppModule {}

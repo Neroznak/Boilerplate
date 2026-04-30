@@ -31,6 +31,7 @@
     "@repo/config": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/shared": "workspace:*",
+    "@sentry/nestjs": "^10.51.0",
     "argon2": "^0.44.0",
     "bullmq": "^5.76.4",
     "class-transformer": "^0.5.1",
