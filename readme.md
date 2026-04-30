@@ -14,8 +14,8 @@ Production-ready boilerplate для fullstack-приложений на базе
 ---
 
 ## 📐 Архитектура
-
-```bash
+```
+bash
 apps/
   api/        → NestJS backend
   web/        → Next.js frontend
@@ -24,7 +24,7 @@ packages/
   database/   → Prisma + DB layer
   config/     → env + validation (zod)
   shared/     → общие типы / утилиты
-
+```
 
 
 
@@ -46,7 +46,7 @@ const envSchema = z.object({
   REDIS_URL: z.string(),
   JWT_SECRET: z.string(),
 });
-
+```
 **Почему:**
 
 - fail-fast при запуске  
@@ -56,9 +56,9 @@ const envSchema = z.object({
 ---
 
 ### 3. Database layer как пакет
-
+```
 `@repo/database`
-
+```
 - Prisma client инкапсулирован  
 - используется как dependency в API  
 - единая точка работы с БД  
@@ -133,7 +133,7 @@ Dev и Prod одинаковы по среде:
 
 ```bash
 docker-compose -f docker-compose.dev.yml up --build
-
+```
 **Доступ:**
 
 - Web: http://localhost:8080  
@@ -146,7 +146,7 @@ docker-compose -f docker-compose.dev.yml up --build
 ```bash
 docker compose -f docker-compose.prod.yml pull
 docker compose -f docker-compose.prod.yml up -d
-
+```
 CI уже пушит образы в Docker Hub:
 
 - `neroznakdn/boilerplate-api`  
@@ -155,11 +155,14 @@ CI уже пушит образы в Docker Hub:
 🗄 **Работа с базой**
 
 **Генерация клиента**
+```
 pnpm --filter @repo/database db:generate
+```
 ### Миграции
 
 ```bash
 pnpm --filter @repo/database db:migrate
+```
 ### Новая схема
 
 1. меняешь `schema.prisma`  
@@ -179,18 +182,18 @@ pnpm --filter @repo/database db:migrate
 
 ```bash
 pnpm --filter api add <package>
-
+```
 
 **В Web**
 
 ```bash
 pnpm --filter web add <package>
-
+```
 **В shared пакет**
 
 ```bash
 pnpm --filter @repo/shared add <package>
-
+```
 **Почему так:**
 
 - контроль зависимостей  
