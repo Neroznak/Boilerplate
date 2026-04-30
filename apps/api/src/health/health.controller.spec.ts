@@ -18,5 +18,6 @@ describe('HealthController', () => {
 
     const controller = moduleRef.get(HealthController);
 
-    expect(controller.check()).toEqual({ status: 'ok' });  });
+    expect(controller.check()).toEqual({ status: 'ok' });
+  });
 });
