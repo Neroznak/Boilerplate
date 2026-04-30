@@ -10,7 +10,8 @@
     "dev": "pnpm --filter @repo/shared build && pnpm --filter @repo/config build && pnpm -r --parallel --filter api --filter web run dev",
     "build": "pnpm -r run build",
     "lint": "pnpm -r run lint",
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node prisma/seed.ts",
+    "test": "pnpm -r run test"
   },
   "devDependencies": {
     "turbo": "^2.9.6"
