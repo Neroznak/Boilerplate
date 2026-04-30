@@ -30,6 +30,11 @@ jobs:
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/boilerplate
 
+      - name: Validate Prisma schema
+        run: pnpm --filter @repo/database exec prisma validate
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/boilerplate
+
       - name: Lint
         run: pnpm lint
 
