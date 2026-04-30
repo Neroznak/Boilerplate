@@ -33,11 +33,11 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-      - name: Test
-        run: pnpm test
-
       - name: Build
         run: pnpm build
+
+      - name: Test
+        run: pnpm test
 
       - name: Build API Docker image
         run: docker build -f apps/api/prod.Dockerfile -t api .
