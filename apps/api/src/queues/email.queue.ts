@@ -9,21 +9,13 @@ export class EmailQueue {
     private readonly queue: Queue,
   ) {}
 
-  async sendEmail(data: {
-    userId: string;
-    email: string;
-    type: string;
-  }) {
-    await this.queue.add(
-      'send-email',
-      data,
-      {
-        attempts: 3,
-        backoff: {
-          type: 'exponential',
-          delay: 1000,
-        },
+  async sendEmail(data: { userId: string; email: string; type: string }) {
+    await this.queue.add('send-email', data, {
+      attempts: 3,
+      backoff: {
+        type: 'exponential',
+        delay: 1000,
       },
-    );
+    });
   }
 }

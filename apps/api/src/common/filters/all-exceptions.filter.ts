@@ -29,7 +29,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       errorResponse !== null &&
       'message' in errorResponse
         ? errorResponse.message
-        : errorResponse ?? 'Internal server error';
+        : (errorResponse ?? 'Internal server error');
 
     if (!isHttp) {
       this.logger.error(exception);

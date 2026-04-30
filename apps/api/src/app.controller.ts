@@ -1,7 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Body, Post } from '@nestjs/common';
-
 
 @Controller()
 export class AppController {
@@ -16,7 +14,4 @@ export class AppController {
   // throwError() {
   //   throw new Error('Test error');
   // }
-
-
-
 }

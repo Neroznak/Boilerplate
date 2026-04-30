@@ -10,10 +10,11 @@ import { EmailQueue } from '../queues/email.queue';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly prisma: PrismaService,
-              private readonly jwtService: JwtService,
-              private readonly emailQueue: EmailQueue) {
-  }
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly jwtService: JwtService,
+    private readonly emailQueue: EmailQueue,
+  ) {}
 
   async register(dto: RegisterDto) {
     const existingUser = await this.prisma.user.findUnique({
@@ -61,7 +62,6 @@ export class AuthService {
         expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
       },
     });
-
 
     return {
       user,

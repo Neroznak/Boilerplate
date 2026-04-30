@@ -1,12 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { APP_NAME } from "@repo/shared";
+import { APP_NAME } from '@repo/shared';
 import { config } from '@repo/config';
 import { Logger as PinoLogger } from 'nestjs-pino';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
-
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

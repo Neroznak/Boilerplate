@@ -10,19 +10,21 @@ import { AuthModule } from './auth/auth.module';
 import { BullModule } from '@nestjs/bullmq';
 import { REDIS_URL } from '@repo/config';
 import { QueuesModule } from './queues/queues.module';
+import type { IncomingMessage } from 'node:http';
 
 @Module({
   imports: [
     LoggerModule.forRoot({
       pinoHttp: {
-        transport: process.env.NODE_ENV !== 'production'
-          ? {
-            target: 'pino-pretty',
-            options: { singleLine: true },
-          }
-          : undefined,
+        transport:
+          process.env.NODE_ENV !== 'production'
+            ? {
+                target: 'pino-pretty',
+                options: { singleLine: true },
+              }
+            : undefined,
         serializers: {
-          req(req) {
+          req(req: IncomingMessage & { id?: string }) {
             return {
               id: req.id,
               method: req.method,
@@ -38,7 +40,7 @@ import { QueuesModule } from './queues/queues.module';
         url: REDIS_URL,
       },
     }),
-    QueuesModule
+    QueuesModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService, PrismaService, RedisService, HealthService],

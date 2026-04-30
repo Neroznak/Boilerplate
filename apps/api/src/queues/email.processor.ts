@@ -6,6 +6,8 @@ import { Job } from 'bullmq';
 export class EmailProcessor extends WorkerHost {
   private readonly logger = new Logger(EmailProcessor.name);
 
+  // BullMQ requires this method to return a Promise.
+  // eslint-disable-next-line @typescript-eslint/require-await
   async process(job: Job<{ userId: string; email: string; type: string }>) {
     if (job.name !== 'send-email') {
       return;
@@ -16,6 +18,5 @@ export class EmailProcessor extends WorkerHost {
       jobId: job.id,
       data: job.data,
     });
-
   }
 }

@@ -26,6 +26,4 @@ export class HealthService {
       return 'error';
     }
   }
-
-
 }

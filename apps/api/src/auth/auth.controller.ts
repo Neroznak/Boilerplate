@@ -1,6 +1,15 @@
-import { Body, Controller, Get, Post, UseGuards, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Req,
+  Res,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto, RefreshTokenDto, RegisterDto } from './dto/auth.dto';
+import { LoginDto, RegisterDto } from './dto/auth.dto';
 import { JwtGuard } from './guards/jwt.guard';
 import type { Request } from 'express';
 import { RolesGuard } from './guards/roles.guard';
@@ -17,10 +26,15 @@ type AuthenticatedRequest = Request & {
   };
 };
 
+type RequestWithRefreshCookie = Request & {
+  cookies?: {
+    refreshToken?: string;
+  };
+};
+
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
 
   @Post('register')
   async register(
@@ -30,7 +44,11 @@ export class AuthController {
     const result = await this.authService.register(dto);
 
     if (result.refreshToken) {
-      res.cookie('refreshToken', result.refreshToken, refreshTokenCookieOptions);
+      res.cookie(
+        'refreshToken',
+        result.refreshToken,
+        refreshTokenCookieOptions,
+      );
     }
 
     return {
@@ -40,11 +58,18 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(@Body() dto: LoginDto, @Res({ passthrough: true }) res: Response) {
+  async login(
+    @Body() dto: LoginDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const result = await this.authService.login(dto);
 
     if (result.refreshToken) {
-      res.cookie('refreshToken', result.refreshToken, refreshTokenCookieOptions);
+      res.cookie(
+        'refreshToken',
+        result.refreshToken,
+        refreshTokenCookieOptions,
+      );
     }
 
     return {
@@ -55,11 +80,13 @@ export class AuthController {
 
   @Post('refresh')
   async refresh(
-    @Req() req: Request,
+    @Req() req: RequestWithRefreshCookie,
     @Res({ passthrough: true }) res: Response,
   ) {
     const refreshToken = req.cookies?.refreshToken;
-
+    if (!refreshToken) {
+      throw new UnauthorizedException('Refresh token is missing');
+    }
     const result = await this.authService.refresh(refreshToken);
 
     if (result.refreshToken) {
@@ -78,11 +105,13 @@ export class AuthController {
 
   @Post('logout')
   async logout(
-    @Req() req: Request,
+    @Req() req: RequestWithRefreshCookie,
     @Res({ passthrough: true }) res: Response,
   ) {
     const refreshToken = req.cookies?.refreshToken;
-
+    if (!refreshToken) {
+      throw new UnauthorizedException('Refresh token is missing');
+    }
     await this.authService.logout(refreshToken);
 
     res.clearCookie('refreshToken', refreshTokenCookieOptions);

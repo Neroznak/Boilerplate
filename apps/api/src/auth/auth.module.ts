@@ -9,16 +9,18 @@ import { config } from '@repo/config';
 import type { StringValue } from 'ms';
 import { QueuesModule } from '../queues/queues.module';
 
+const jwtSecret: string = config.JWT_SECRET;
+const jwtAccessExpiresIn: StringValue = config.JWT_ACCESS_EXPIRES_IN;
 
 @Module({
   imports: [
     JwtModule.register({
-      secret: config.JWT_SECRET,
-      signOptions: { expiresIn: config.JWT_ACCESS_EXPIRES_IN as StringValue },
+      secret: jwtSecret,
+      signOptions: { expiresIn: jwtAccessExpiresIn },
     }),
     QueuesModule,
   ],
   providers: [AuthService, PrismaService, JwtStrategy, RolesGuard],
-  controllers: [AuthController]
+  controllers: [AuthController],
 })
 export class AuthModule {}
