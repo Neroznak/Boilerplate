@@ -47,6 +47,8 @@ services:
       TSC_WATCHDIRECTORY: "RecursiveDirectoryUsingFsWatchFile"
       JWT_SECRET: "dev-jwt-secret-change-me"
       JWT_ACCESS_EXPIRES_IN: "15m"
+      SEED_ADMIN_EMAIL: "neroznak@admin.ru"
+      SEED_ADMIN_PASSWORD: "Nero00900!"
     depends_on:
       - postgres
       - redis
